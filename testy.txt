@@ -1,0 +1,123 @@
+test 1
+atributes = "A,B,C,D,E"
+relations = "A,C -> D;B   -> C;E   -> B;D   -> A"
+
+Atrybuty kluczowe: A, D, E
+Atrybuty niekluczowe: B, C
+F_min = { B -> C; D -> A; E -> B; A,C -> D }
+2PN: nie
+3PN: nie
+Synteza do 3PN:
+R0(B, C) : B -> C
+R2(B, E) : E -> B
+R3(A, C, D) : D -> A; A,C -> D
+R4(A, E) : (brak)
+
+
+test 2 
+atributes = "K, W, G, N, S, O"
+relations = "K   -> W;N,G -> K;W,G -> N;S,G -> K;S,K -> O"
+
+Atrybuty kluczowe: G, S
+Atrybuty niekluczowe: K, W, N, O
+F_min = { K -> W; G,N -> K; G,S -> N; G,W -> N; K,S -> O }
+2PN: tak
+3PN: nie
+Synteza do 3PN:
+R0(K, W) : K -> W
+R1(G, K, N) : G,N -> K
+R2(G, N, S) : G,S -> N
+R3(G, N, W) : G,W -> N
+R4(K, O, S) : K,S -> O
+
+
+test 3
+atributes = "A, B, C, D, E, F"
+relations = "A,B -> C;A,D -> E ;B   -> D;A,F -> B"
+
+Atrybuty kluczowe: A, F
+Atrybuty niekluczowe: B, C, D, E
+F_min = { B -> D; A,B -> C; A,D -> E; A,F -> B }
+2PN: tak
+3PN: nie
+Synteza do 3PN:
+R0(B, D) : B -> D
+R1(A, B, C) : A,B -> C
+R2(A, D, E) : A,D -> E
+R3(A, B, F) : A,F -> B
+
+
+test 4
+atributes = "A, B, C, D, E"
+relations = "A,C -> D;B   -> C;A,C -> E;D   -> A;E   -> C"
+
+Atrybuty kluczowe: A, B, D
+Atrybuty niekluczowe: C, E
+F_min = { B -> C; D -> A; E -> C; A,C -> D; A,C -> E }
+2PN: nie
+3PN: nie
+Synteza do 3PN:
+R0(B, C) : B -> C
+R3(A, C, D, E) : D -> A; E -> C; A,C -> D; A,C -> E
+R4(A, B) : (brak)
+
+
+test 6
+atributes = "A, B, C, D, E, G"
+relations = "A,B -> C;D   -> E,G;C   -> A,C;B,E -> C;C,E -> A,G"
+
+Atrybuty kluczowe: B, D
+Atrybuty niekluczowe: A, C, E, G
+F_min = { C -> A; D -> E; D -> G; A,B -> C; B,E -> C; C,E -> G }
+2PN: nie
+3PN: nie
+Synteza do 3PN:
+R1(D, E, G) : D -> E; D -> G
+R2(A, B, C) : C -> A; A,B -> C
+R3(B, C, E) : B,E -> C
+R4(C, E, G) : C,E -> G
+R5(B, D) : (brak)
+
+
+test 7 
+atributes = "pesel, pakiet, imię, nazwisko, cena, rodzaj"
+relations = "pesel -> imię, nazwisko;pakiet -> cena, rodzaj"
+
+
+test 8
+atributes = "A"
+relations = "A->A"
+
+Atrybuty kluczowe: A
+Atrybuty niekluczowe: (brak)
+F_min = (brak)
+2PN: tak
+3PN: tak
+
+test 9 
+atributes = "A, B, C, D, E, F, G, H, I, J, XD"
+relations = "A   -> D,E;B   -> F;D   -> I,J;C,G -> H;B   -> XD,D;XD  -> A,B"
+
+Atrybuty kluczowe: B, C, G, XD
+Atrybuty niekluczowe: A, D, E, F, H, I, J
+F_min = { A -> D; A -> E; B -> F; B -> XD; D -> I; D -> J; XD -> A; XD -> B; C,G -> H }
+2PN: nie
+3PN: nie
+Synteza do 3PN:
+R0(A, D, E) : A -> D; A -> E
+R1(B, F, XD) : B -> F; B -> XD; XD -> B
+R2(D, I, J) : D -> I; D -> J
+R3(A, B, XD) : B -> XD; XD -> A; XD -> B
+R4(C, G, H) : C,G -> H
+R5(B, C, G) : (brak)
+
+
+test 10
+atributes = "A, B, C, D, E"
+relations = "A,B,C -> D,E;D->A;E->B"
+
+Atrybuty kluczowe: A, B, C, D, E
+Atrybuty niekluczowe: (brak)
+F_min = { D -> A; E -> B; A,B,C -> D; A,B,C -> E }
+2PN: tak
+3PN: tak
