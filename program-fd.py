@@ -164,7 +164,10 @@ class Object_for_the_sake_of_it:
             else:
                 PN3_relations[left_side] = []
         
-        print(PN3_relations)
+        count = 1
+        for item, val in PN3_relations.items():
+            print(f"R{count}({item})    {val}")
+            count += 1
 
 
     def redundant_relation(self, left_side, right_side):
@@ -208,7 +211,7 @@ class Object_for_the_sake_of_it:
     def print_F_min(self):
         for item, val in self.relation_dict.items():
             for r in val:
-                print(f"{item}: {r}")
+                print(f"{item} -> {r}")
     
     def get_key_candidates(self):
         keys = []
@@ -246,6 +249,32 @@ class Object_for_the_sake_of_it:
                     return False
         return True
     
+    def second_normal_pop_up(self):
+        if self.second_normal():
+            print("\nRelacja jest w drugiej postaci normalnej\n")
+        else:
+            print("\nRelacja nie jest w 2 postaci normalnej.\n\nAby relacja była w 2PN konieczne jest, aby każdy atrybut niekluczowy był w pełni funkcyjnie zależny od każdego klucza tej relacji.")
+            print("\nW podanym schemacie istnieje przyjemniej jedna częściowa zależność funkcyjna, która narusza 2PN.\nTe zależności to:\n")
+            for key_atribute in self.key_atributes:
+                atributes_from_key_atribute = self.closures[key_atribute]
+                for atr in self.not_key_atributes:
+                    if atr in atributes_from_key_atribute:
+                        print(f"{key_atribute} -> {atr}")
+
+    def third_normal_pop_up(self):
+        if not self.second_normal():
+            print("\nRelacja nie jest 3 postaci normalnej, ponieważ nie jest w 2 postaci normalnej.\n")
+            print("\nAby relacja była w 3PN konieczne jest, aby była w 2PN oraz aby każda zależność funkcyjna X -> Y miała jedną z następujących własności:\n")
+            print("\n(1) zależność jest trywialna (Y zawiera się w X) lub\n(2) X jest nadkluczem lub\n(3) Y jest atrybutem kluczowym\n")
+            print("\n Oto synteza to n3:\n")
+        elif not self.third_normal():
+            print("\nRelacja jest w drugiej postaci normalnej ale nie w trzeciej. Oto synteza:\n")
+        else:
+            print("\nSchemat jest w trzeciej postaci normalnej.")
+            return
+        
+        self.synthesis_to_n3()
+
     def third_normal(self):
         if self.atributes_from_key(self.not_key_atributes):
             return False
@@ -260,12 +289,27 @@ class Object_for_the_sake_of_it:
                 return False
         return True
     
-atributes = "pesel, pakiet, imię, nazwisko, cena, rodzaj"
-relations = "pesel -> imię, nazwisko;pakiet -> cena, rodzaj"
-
+    def print_closures(self):
+        for item, val in self.closures.items():
+            print("{" + item + "}+ = " + "{" + self.stringify(val) + "}", end = "")
+            if item in self.potential_keys:
+                print("    <- Min klucz kandydujacy")
+            else:
+                print("")
+    
+atributes = "A, B, C, D, E, G"
+relations = "A,B -> C;D   -> E,G;C   -> A,C;B,E -> C;C,E -> A,G"
 
 solver = Object_for_the_sake_of_it(atributes, relations)
-solver.second_normal()
-solver.synthesis_to_n3()
-# TODO: algorytm syntezy
+
+print("Domknięcia:\n")
+solver.print_closures()
+print("\nAtrybuty kluczowe:\n")
+print(solver.key_atributes)
+print("\nAtrybuty niekluczowe\n")
+print(solver.not_key_atributes)
+print("\nBaza minimalna:\n")
+solver.print_F_min()
+solver.second_normal_pop_up()
+solver.third_normal_pop_up()
 
